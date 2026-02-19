@@ -1,0 +1,44 @@
+@layer base {
+  body {
+    background-color: var(--ml-bg, #0a0a0f);
+    color: var(--ml-fg, #f9fafb);
+    font-family: var(--ml-font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--ml-surface-50, #0f0f18);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--ml-surface-300, #24243a);
+    border-radius: 9999px;
+  }
+
+  /* Global focus-visible */
+  :where(a, button, input, select, textarea, [role='button'], [role='menuitem'], [role='tab']):focus-visible {
+    outline: none;
+    box-shadow:
+      0 0 0 2px var(--ml-primary, #8b5cf6),
+      0 0 0 4px transparent;
+  }
+
+  /* Dark select */
+  select {
+    color-scheme: dark;
+  }
+  select option,
+  select optgroup {
+    background-color: var(--ml-surface-50, #0f0f18);
+    color: var(--ml-fg, #f9fafb);
+  }
+
+  /* Accessibility: link underline offset */
+  a {
+    text-underline-offset: 0.18em;
+  }
+}
