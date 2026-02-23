@@ -1,6 +1,6 @@
 {
   "name": "@memelabui/ui",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "MemeLab shared UI component library — React + Tailwind + Glassmorphism",
   "type": "module",
   "sideEffects": [
