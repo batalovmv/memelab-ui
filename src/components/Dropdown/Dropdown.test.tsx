@@ -1,4 +1,4 @@
-import { act, render, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { Dropdown, DropdownItem, DropdownMenu, DropdownSeparator, DropdownTrigger } from './Dropdown';
@@ -151,10 +151,10 @@ describe('Dropdown', () => {
     const items = screen.getAllByRole('menuitem');
     items[0].focus();
 
-    await user.keyboard('{ArrowDown}');
+    fireEvent.keyDown(items[0], { key: 'ArrowDown' });
     expect(items[1]).toHaveFocus();
 
-    await user.keyboard('{ArrowDown}');
+    fireEvent.keyDown(items[1], { key: 'ArrowDown' });
     expect(items[2]).toHaveFocus();
   });
 
@@ -166,7 +166,7 @@ describe('Dropdown', () => {
     const items = screen.getAllByRole('menuitem');
     items[0].focus();
 
-    await user.keyboard('{ArrowUp}');
+    fireEvent.keyDown(items[0], { key: 'ArrowUp' });
     // Wraps to last item
     expect(items[2]).toHaveFocus();
   });
@@ -179,7 +179,7 @@ describe('Dropdown', () => {
     const items = screen.getAllByRole('menuitem');
     items[2].focus();
 
-    await user.keyboard('{Home}');
+    fireEvent.keyDown(items[2], { key: 'Home' });
     expect(items[0]).toHaveFocus();
   });
 
@@ -191,7 +191,7 @@ describe('Dropdown', () => {
     const items = screen.getAllByRole('menuitem');
     items[0].focus();
 
-    await user.keyboard('{End}');
+    fireEvent.keyDown(items[0], { key: 'End' });
     expect(items[2]).toHaveFocus();
   });
 
@@ -203,7 +203,7 @@ describe('Dropdown', () => {
     const items = screen.getAllByRole('menuitem');
     items[items.length - 1].focus();
 
-    await user.keyboard('{ArrowDown}');
+    fireEvent.keyDown(items[items.length - 1], { key: 'ArrowDown' });
     expect(items[0]).toHaveFocus();
   });
 
