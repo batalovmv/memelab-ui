@@ -18,9 +18,10 @@ describe('Navbar', () => {
     expect(screen.getByTestId('custom-logo')).toBeInTheDocument();
   });
 
-  it('renders default logo text when none provided', () => {
+  it('renders default logo placeholder when none provided', () => {
     render(<Navbar />);
-    expect(screen.getByText('MemeLab')).toBeInTheDocument();
+    const banner = screen.getByRole('banner');
+    expect(banner.querySelector('.animated-gradient')).toBeInTheDocument();
   });
 
   it('renders children', () => {

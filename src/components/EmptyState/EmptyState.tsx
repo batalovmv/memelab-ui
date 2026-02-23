@@ -1,10 +1,10 @@
-import { type ReactNode } from 'react';
+import { type ComponentType, type ReactNode } from 'react';
 
 import { cn } from '@/utils/cn';
 import { Button } from '@/components/Button/Button';
 
 export type EmptyStateProps = {
-  icon?: (props: { className?: string }) => JSX.Element;
+  icon?: ComponentType<{ className?: string }>;
   title: string;
   description?: string;
   actionLabel?: string;

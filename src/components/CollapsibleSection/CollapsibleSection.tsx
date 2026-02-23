@@ -1,4 +1,4 @@
-import { type ReactNode, useState } from 'react';
+import { type ReactNode, useId, useState } from 'react';
 
 import { cn } from '@/utils/cn';
 
@@ -12,14 +12,18 @@ export type CollapsibleSectionProps = {
 
 export function CollapsibleSection({ title, defaultOpen = true, children, right, className }: CollapsibleSectionProps) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
+  const contentId = useId();
+  const titleId = `${contentId}-title`;
 
   return (
     <div className={cn('rounded-xl ring-1 ring-white/10 bg-white/5 overflow-hidden', className)}>
       <button
         type="button"
+        id={titleId}
         onClick={() => setIsOpen((prev) => !prev)}
         className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left hover:bg-white/[0.03] transition-colors"
         aria-expanded={isOpen}
+        aria-controls={contentId}
       >
         <div className="flex items-center gap-2">
           <svg
@@ -37,6 +41,9 @@ export function CollapsibleSection({ title, defaultOpen = true, children, right,
         {right}
       </button>
       <div
+        id={contentId}
+        role="region"
+        aria-labelledby={titleId}
         className={cn(
           'grid transition-[grid-template-rows] duration-200 ease-out',
           isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]',

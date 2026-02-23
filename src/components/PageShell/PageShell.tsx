@@ -11,6 +11,7 @@ export type PageShellProps = {
   children: ReactNode;
   className?: string;
   mainClassName?: string;
+  /** @deprecated Use `mainClassName` instead. Alias kept for backwards compatibility. */
   containerClassName?: string;
   maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'full';
 };
@@ -29,7 +30,7 @@ function defaultBackground(): ReactNode {
     <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
       <div className="absolute -top-32 -left-32 h-[600px] w-[600px] rounded-full bg-violet-600/20 blur-[140px]" />
       <div className="absolute top-20 -right-32 h-[500px] w-[500px] rounded-full bg-purple-500/[0.12] blur-[120px]" />
-      <div className="absolute bottom-0 left-1/2 h-[400px] w-[500px] -translate-x-1/2 rounded-full bg-indigo-500/[0.10] blur-[120px]" />
+      <div className="absolute bottom-0 left-1/2 h-[400px] w-[500px] -translate-x-1/2 rounded-full bg-accent/[0.10] blur-[120px]" />
     </div>
   );
 }

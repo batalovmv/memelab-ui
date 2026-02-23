@@ -20,9 +20,9 @@ const sizeClass = {
 
 const variantClass: Record<NonNullable<IconButtonProps['variant']>, string> = {
   primary: 'bg-primary text-white shadow-glow hover:brightness-[0.98]',
-  success: 'bg-emerald-600 text-white shadow-[0_10px_18px_rgba(16,185,129,0.22)] hover:bg-emerald-700',
-  warning: 'bg-amber-600 text-white shadow-[0_10px_18px_rgba(245,158,11,0.22)] hover:bg-amber-700',
-  danger: 'bg-rose-600 text-white shadow-[0_10px_18px_rgba(244,63,94,0.22)] hover:bg-rose-700',
+  success: 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/20 hover:bg-emerald-700',
+  warning: 'bg-amber-600 text-white shadow-lg shadow-amber-600/20 hover:bg-amber-700',
+  danger: 'bg-rose-600 text-white shadow-lg shadow-rose-600/20 hover:bg-rose-700',
   secondary: 'text-white bg-white/10 shadow-sm ring-1 ring-white/10',
   ghost: 'text-white hover:bg-white/10',
 };

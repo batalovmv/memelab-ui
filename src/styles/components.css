@@ -38,9 +38,9 @@
   .text-gradient {
     background: linear-gradient(
       135deg,
-      var(--ml-accent, #667eea) 0%,
-      var(--ml-glow-purple, #764ba2) 50%,
-      var(--ml-glow-pink, #f093fb) 100%
+      rgb(var(--ml-accent, 102 126 234)) 0%,
+      rgb(var(--ml-glow-purple, 118 75 162)) 50%,
+      rgb(var(--ml-glow-pink, 240 147 251)) 100%
     );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -51,9 +51,9 @@
   .animated-gradient {
     background: linear-gradient(
       270deg,
-      var(--ml-accent, #667eea),
-      var(--ml-glow-purple, #764ba2),
-      var(--ml-glow-pink, #f093fb)
+      rgb(var(--ml-accent, 102 126 234)),
+      rgb(var(--ml-glow-purple, 118 75 162)),
+      rgb(var(--ml-glow-pink, 240 147 251))
     );
     background-size: 400% 400%;
     animation: ml-gradient 15s ease infinite;
@@ -90,13 +90,13 @@
     pointer-events: none;
   }
   .orb-purple {
-    background: var(--ml-glow-purple, #764ba2);
+    background: rgb(var(--ml-glow-purple, 118 75 162));
   }
   .orb-blue {
-    background: var(--ml-accent, #667eea);
+    background: rgb(var(--ml-accent, 102 126 234));
   }
   .orb-pink {
-    background: var(--ml-glow-pink, #f093fb);
+    background: rgb(var(--ml-glow-pink, 240 147 251));
   }
 
   /* iOS safe-area */

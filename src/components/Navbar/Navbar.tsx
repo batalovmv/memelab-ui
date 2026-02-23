@@ -14,14 +14,13 @@ export function Navbar({ logo, children, className, glass = true }: NavbarProps)
     <header className={cn('fixed top-0 w-full z-50', glass && 'glass', className)}>
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          {logo || (
-            <>
-              <div className="w-9 h-9 rounded-xl animated-gradient" />
-              <span className="text-lg font-bold tracking-tight">MemeLab</span>
-            </>
-          )}
+          {logo ?? <div className="w-9 h-9 rounded-xl animated-gradient" />}
         </div>
-        {children && <div className="flex items-center gap-4">{children}</div>}
+        {children && (
+          <nav aria-label="Main navigation">
+            <div className="flex items-center gap-4">{children}</div>
+          </nav>
+        )}
       </div>
     </header>
   );

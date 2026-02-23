@@ -3,6 +3,28 @@ import { useEffect, useRef, type ReactNode } from 'react';
 import { cn } from '@/utils/cn';
 import { focusSafely, getFocusableElements } from '@/utils/focus';
 
+// ─── Ref-counting scroll lock (safe for nested modals) ──────────────────────
+
+let scrollLockCount = 0;
+let savedOverflow = '';
+
+function lockScroll() {
+  if (typeof document === 'undefined') return;
+  if (scrollLockCount === 0) {
+    savedOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+  }
+  scrollLockCount++;
+}
+
+function unlockScroll() {
+  if (typeof document === 'undefined') return;
+  scrollLockCount = Math.max(0, scrollLockCount - 1);
+  if (scrollLockCount === 0) {
+    document.body.style.overflow = savedOverflow;
+  }
+}
+
 export type ModalProps = {
   isOpen: boolean;
   onClose: () => void;
@@ -33,6 +55,7 @@ export function Modal({
   const dialogRef = useRef<HTMLDivElement>(null);
   const lastActiveElementRef = useRef<HTMLElement | null>(null);
 
+  // Focus management
   useEffect(() => {
     if (!isOpen) return;
 
@@ -51,6 +74,13 @@ export function Modal({
       lastActiveElementRef.current = null;
       if (lastActive?.isConnected) focusSafely(lastActive);
     };
+  }, [isOpen]);
+
+  // Body scroll lock (ref-counted for nested modals)
+  useEffect(() => {
+    if (!isOpen) return;
+    lockScroll();
+    return () => unlockScroll();
   }, [isOpen]);
 
   if (!isOpen) return null;
@@ -77,7 +107,7 @@ export function Modal({
         ref={dialogRef}
         className={cn(
           'w-full rounded-t-3xl sm:rounded-2xl shadow-xl ring-1 ring-white/10 animate-modal-pop focus:outline-none focus-visible:ring-2 focus-visible:ring-primary',
-          useGlass && 'glass bg-[#0f0f18]/80',
+          useGlass && 'glass bg-surface-50/80',
           contentClassName,
         )}
         onMouseDown={(e) => e.stopPropagation()}

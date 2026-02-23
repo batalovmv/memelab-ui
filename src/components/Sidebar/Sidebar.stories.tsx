@@ -17,6 +17,15 @@ const NavLinks = () => (
   </div>
 );
 
+function SidebarWithToggle() {
+  const [collapsed, setCollapsed] = useState(false);
+  return (
+    <Sidebar collapsed={collapsed} onToggle={() => setCollapsed((prev) => !prev)}>
+      <NavLinks />
+    </Sidebar>
+  );
+}
+
 const meta = {
   title: 'Layout/Sidebar',
   component: Sidebar,
@@ -52,12 +61,5 @@ export const Collapsed: Story = {
 };
 
 export const WithToggle: Story = {
-  render: () => {
-    const [collapsed, setCollapsed] = useState(false);
-    return (
-      <Sidebar collapsed={collapsed} onToggle={() => setCollapsed((prev) => !prev)}>
-        <NavLinks />
-      </Sidebar>
-    );
-  },
+  render: () => <SidebarWithToggle />,
 };

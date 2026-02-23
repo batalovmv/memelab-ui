@@ -1,5 +1,8 @@
 import type { Config } from 'tailwindcss';
-import plugin from 'tailwindcss/plugin';
+
+/** Helper: wrap a CSS-var (storing space-separated RGB channels) for Tailwind's opacity modifier */
+const rgb = (cssVar: string) =>
+  `rgb(var(${cssVar}) / <alpha-value>)`;
 
 const memelabPreset: Partial<Config> = {
   darkMode: 'class',
@@ -7,31 +10,31 @@ const memelabPreset: Partial<Config> = {
     extend: {
       colors: {
         surface: {
-          DEFAULT: 'var(--ml-bg)',
-          0: 'var(--ml-surface-0)',
-          50: 'var(--ml-surface-50)',
-          100: 'var(--ml-surface-100)',
-          200: 'var(--ml-surface-200)',
-          300: 'var(--ml-surface-300)',
-          400: 'var(--ml-surface-400)',
+          DEFAULT: rgb('--ml-bg'),
+          0: rgb('--ml-surface-0'),
+          50: rgb('--ml-surface-50'),
+          100: rgb('--ml-surface-100'),
+          200: rgb('--ml-surface-200'),
+          300: rgb('--ml-surface-300'),
+          400: rgb('--ml-surface-400'),
         },
         primary: {
-          DEFAULT: 'var(--ml-primary)',
-          light: 'var(--ml-primary-light)',
-          dark: 'var(--ml-primary-dark)',
+          DEFAULT: rgb('--ml-primary'),
+          light: rgb('--ml-primary-light'),
+          dark: rgb('--ml-primary-dark'),
         },
         accent: {
-          DEFAULT: 'var(--ml-accent)',
-          light: 'var(--ml-accent-light)',
-          dark: 'var(--ml-accent-dark)',
+          DEFAULT: rgb('--ml-accent'),
+          light: rgb('--ml-accent-light'),
+          dark: rgb('--ml-accent-dark'),
         },
         glow: {
-          purple: 'var(--ml-glow-purple)',
-          pink: 'var(--ml-glow-pink)',
+          purple: rgb('--ml-glow-purple'),
+          pink: rgb('--ml-glow-pink'),
         },
-        success: 'var(--ml-success)',
-        warning: 'var(--ml-warning)',
-        danger: 'var(--ml-danger)',
+        success: rgb('--ml-success'),
+        warning: rgb('--ml-warning'),
+        danger: rgb('--ml-danger'),
       },
       fontFamily: {
         sans: ['var(--ml-font-sans)'],
@@ -56,6 +59,7 @@ const memelabPreset: Partial<Config> = {
         'modal-backdrop': 'ml-modal-backdrop 140ms ease-out both',
         'modal-pop': 'ml-modal-pop 160ms cubic-bezier(0.22,1,0.36,1) both',
         shimmer: 'ml-shimmer 2s ease-in-out infinite',
+        spin: 'ml-spin 1s linear infinite',
       },
       keyframes: {
         'ml-float': {
@@ -87,50 +91,19 @@ const memelabPreset: Partial<Config> = {
           '0%': { transform: 'translateX(-200%)' },
           '100%': { transform: 'translateX(200%)' },
         },
+        'ml-spin': {
+          from: { transform: 'rotate(0deg)' },
+          to: { transform: 'rotate(360deg)' },
+        },
       },
     },
   },
-  plugins: [
-    plugin(function ({ addComponents }) {
-      addComponents({
-        '.glass': {
-          borderRadius: 'var(--ml-radius-md, 0.75rem)',
-          background: 'var(--ml-glass-bg, rgba(255, 255, 255, 0.05))',
-          backdropFilter: 'blur(var(--ml-glass-blur, 16px))',
-          WebkitBackdropFilter: 'blur(var(--ml-glass-blur, 16px))',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.35), inset 0 0 0 1px var(--ml-glass-border, rgba(255,255,255,0.1))',
-        },
-        '.surface': {
-          borderRadius: 'var(--ml-radius-md, 0.75rem)',
-          background: 'rgba(255, 255, 255, 0.06)',
-          backdropFilter: 'blur(12px)',
-          WebkitBackdropFilter: 'blur(12px)',
-          boxShadow:
-            'var(--ml-shadow-surface, 0 1px 3px rgba(0,0,0,0.3), inset 0 0 0 1px rgba(255,255,255,0.08))',
-        },
-        '.surface-hover': {
-          transition: 'box-shadow var(--ml-transition-fast, 150ms ease)',
-          '&:hover': {
-            boxShadow:
-              'var(--ml-shadow-surface-hover, 0 10px 25px rgba(0,0,0,0.45), inset 0 0 0 1px rgba(255,255,255,0.09))',
-          },
-        },
-        '.text-gradient': {
-          background:
-            'linear-gradient(135deg, var(--ml-accent,#667eea) 0%, var(--ml-glow-purple,#764ba2) 50%, var(--ml-glow-pink,#f093fb) 100%)',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          backgroundClip: 'text',
-        },
-        '.animated-gradient': {
-          background:
-            'linear-gradient(270deg, var(--ml-accent,#667eea), var(--ml-glow-purple,#764ba2), var(--ml-glow-pink,#f093fb))',
-          backgroundSize: '400% 400%',
-          animation: 'ml-gradient 15s ease infinite',
-        },
-      });
-    }),
-  ],
+  /*
+   * Component classes (.glass, .surface, .text-gradient, etc.) are defined in
+   * src/styles/components.css and shipped via @memelabui/ui/styles.
+   * They are NOT duplicated here to avoid double-injection when consumers
+   * use both the preset and the CSS import (the recommended setup).
+   */
 };
 
 export default memelabPreset;

@@ -1,15 +1,15 @@
 :root {
   /* ---- Background ---- */
-  --ml-bg: #0a0a0f;
-  --ml-fg: #f9fafb;
+  --ml-bg: 10 10 15;
+  --ml-fg: 249 250 251;
 
   /* ---- Surface scale ---- */
-  --ml-surface-0: #0a0a0f;
-  --ml-surface-50: #0f0f18;
-  --ml-surface-100: #141420;
-  --ml-surface-200: #1a1a2e;
-  --ml-surface-300: #24243a;
-  --ml-surface-400: #2a2a4a;
+  --ml-surface-0: 10 10 15;
+  --ml-surface-50: 15 15 24;
+  --ml-surface-100: 20 20 32;
+  --ml-surface-200: 26 26 46;
+  --ml-surface-300: 36 36 58;
+  --ml-surface-400: 42 42 74;
 
   /* ---- Glass ---- */
   --ml-glass-bg: rgba(255, 255, 255, 0.05);
@@ -19,23 +19,23 @@
   --ml-glass-blur: 16px;
 
   /* ---- Primary palette ---- */
-  --ml-primary: #8b5cf6;
-  --ml-primary-light: #a78bfa;
-  --ml-primary-dark: #7c3aed;
+  --ml-primary: 139 92 246;
+  --ml-primary-light: 167 139 250;
+  --ml-primary-dark: 124 58 237;
 
   /* ---- Accent (gradient source) ---- */
-  --ml-accent: #667eea;
-  --ml-accent-light: #8b9cf7;
-  --ml-accent-dark: #4c5fd4;
+  --ml-accent: 102 126 234;
+  --ml-accent-light: 139 156 247;
+  --ml-accent-dark: 76 95 212;
 
   /* ---- Glow ---- */
-  --ml-glow-purple: #764ba2;
-  --ml-glow-pink: #f093fb;
+  --ml-glow-purple: 118 75 162;
+  --ml-glow-pink: 240 147 251;
 
   /* ---- Semantic ---- */
-  --ml-success: #10b981;
-  --ml-warning: #f59e0b;
-  --ml-danger: #f43f5e;
+  --ml-success: 16 185 129;
+  --ml-warning: 245 158 11;
+  --ml-danger: 244 63 94;
 
   /* ---- Typography ---- */
   --ml-font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;

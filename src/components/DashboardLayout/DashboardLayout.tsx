@@ -7,9 +7,20 @@ export type DashboardLayoutProps = {
   navbar?: ReactNode;
   sidebar?: ReactNode;
   className?: string;
+  mainClassName?: string;
+  maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'full';
 };
 
-export function DashboardLayout({ children, navbar, sidebar, className }: DashboardLayoutProps) {
+const maxWidthClass: Record<string, string> = {
+  sm: 'max-w-2xl',
+  md: 'max-w-4xl',
+  lg: 'max-w-5xl',
+  xl: 'max-w-7xl',
+  '2xl': 'max-w-[92rem]',
+  full: 'max-w-full',
+};
+
+export function DashboardLayout({ children, navbar, sidebar, className, mainClassName, maxWidth = 'lg' }: DashboardLayoutProps) {
   return (
     <div className={cn('min-h-screen bg-surface relative overflow-hidden', className)}>
       {/* Background orbs */}
@@ -22,8 +33,8 @@ export function DashboardLayout({ children, navbar, sidebar, className }: Dashbo
 
       <div className={cn('flex', navbar && 'pt-16')}>
         {sidebar}
-        <main className="flex-1 min-w-0 py-8 px-6">
-          <div className="max-w-5xl mx-auto">{children}</div>
+        <main className={cn('flex-1 min-w-0 py-8 px-6', mainClassName)}>
+          <div className={cn('mx-auto', maxWidthClass[maxWidth])}>{children}</div>
         </main>
       </div>
     </div>

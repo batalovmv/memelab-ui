@@ -79,13 +79,22 @@
   }
 }
 
-/* Reduced motion */
+/* Reduced motion — scoped to library classes only, no global !important */
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+  .glass,
+  .surface,
+  .surface-hover,
+  .animated-gradient,
+  [class*='animate-float'],
+  [class*='animate-gradient'],
+  [class*='animate-pulse-glow'],
+  [class*='animate-fade-up'],
+  [class*='animate-modal'],
+  [class*='animate-shimmer'],
+  [class*='animate-spin'],
+  [class*='animate-pulse'] {
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+    transition-duration: 0.01ms;
   }
 }

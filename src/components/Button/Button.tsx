@@ -24,10 +24,10 @@ const sizeClass: Record<ButtonSize, string> = {
 
 const variantClass: Record<ButtonVariant, string> = {
   primary:
-    'bg-gradient-to-r from-violet-600 to-purple-600 text-white shadow-[0_0_25px_rgba(139,92,246,0.35)] hover:shadow-[0_0_35px_rgba(139,92,246,0.5)] hover:scale-[1.02]',
-  success: 'bg-emerald-600 text-white shadow-[0_10px_18px_rgba(16,185,129,0.22)] hover:bg-emerald-700',
-  warning: 'bg-amber-600 text-white shadow-[0_10px_18px_rgba(245,158,11,0.22)] hover:bg-amber-700',
-  danger: 'bg-rose-600 text-white shadow-[0_10px_18px_rgba(244,63,94,0.22)] hover:bg-rose-700',
+    'bg-gradient-to-r from-violet-600 to-purple-600 text-white shadow-glow hover:shadow-glow-lg hover:scale-[1.02]',
+  success: 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/20 hover:bg-emerald-700',
+  warning: 'bg-amber-600 text-white shadow-lg shadow-amber-600/20 hover:bg-amber-700',
+  danger: 'bg-rose-600 text-white shadow-lg shadow-rose-600/20 hover:bg-rose-700',
   secondary: 'text-white bg-white/5 ring-1 ring-white/10 hover:bg-white/10 hover:ring-white/20 backdrop-blur-sm',
   ghost: 'text-white/70 hover:text-white hover:bg-white/5',
 };
@@ -42,6 +42,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
       type={type === 'submit' ? 'submit' : type === 'reset' ? 'reset' : 'button'}
       {...props}
       disabled={disabled || loading}
+      {...(loading ? { 'aria-busy': true } : {})}
       className={cn(base, sizeClass[size], variantClass[variant], className)}
     >
       {loading ? (

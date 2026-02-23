@@ -1,9 +1,19 @@
-import { cloneElement, type ReactElement, type ReactNode, useEffect, useId, useMemo, useRef, useState } from 'react';
+import {
+  cloneElement,
+  isValidElement,
+  type ReactElement,
+  type ReactNode,
+  useCallback,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+} from 'react';
 import { createPortal } from 'react-dom';
 
 import { cn } from '@/utils/cn';
 
-type TooltipPlacement = 'top' | 'bottom';
+export type TooltipPlacement = 'top' | 'bottom';
 
 export type TooltipProps = {
   content: ReactNode;
@@ -22,19 +32,14 @@ export function Tooltip({ content, delayMs = 500, placement = 'top', className, 
   const [open, setOpen] = useState(false);
   const [pos, setPos] = useState<Pos>(null);
 
-  const contentStr = useMemo(() => {
-    if (typeof content === 'string') return content.trim();
-    return '';
-  }, [content]);
-
-  function clearTimer() {
+  const clearTimer = useCallback(() => {
     if (openTimerRef.current !== null) {
       window.clearTimeout(openTimerRef.current);
       openTimerRef.current = null;
     }
-  }
+  }, []);
 
-  function updatePosition() {
+  const updatePosition = useCallback(() => {
     const el = anchorRef.current;
     if (!el) return;
     const r = el.getBoundingClientRect();
@@ -52,19 +57,19 @@ export function Tooltip({ content, delayMs = 500, placement = 'top', className, 
       top: Math.round(effPlacement === 'top' ? topY : bottomY),
       placement: effPlacement,
     });
-  }
+  }, [placement]);
 
-  function scheduleOpen() {
+  const scheduleOpen = useCallback(() => {
     clearTimer();
     openTimerRef.current = window.setTimeout(() => {
       setOpen(true);
     }, Math.max(0, delayMs));
-  }
+  }, [clearTimer, delayMs]);
 
-  function close() {
+  const close = useCallback(() => {
     clearTimer();
     setOpen(false);
-  }
+  }, [clearTimer]);
 
   useEffect(() => {
     if (!open) return;
@@ -79,50 +84,58 @@ export function Tooltip({ content, delayMs = 500, placement = 'top', className, 
       window.removeEventListener('scroll', onScroll, true);
       window.removeEventListener('resize', onResize);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open]);
+  }, [open, updatePosition]);
 
   useEffect(() => {
     return () => clearTimer();
-  }, []);
+  }, [clearTimer]);
+
+  if (!isValidElement(children)) return children;
 
   const child = cloneElement(children, {
-    ref: (node: unknown) => {
-      anchorRef.current = node as HTMLElement | null;
+    ref: (node: HTMLElement | null) => {
+      anchorRef.current = node;
 
-      const prevRef = (children as unknown as { ref?: unknown }).ref;
+      // Forward ref to the original child
+      const childProps = children.props as Record<string, unknown>;
+      const prevRef = childProps.ref;
       if (typeof prevRef === 'function') prevRef(node);
-      else if (prevRef && typeof prevRef === 'object') (prevRef as { current?: unknown }).current = node;
+      else if (prevRef && typeof prevRef === 'object') (prevRef as { current: unknown }).current = node;
     },
-    onMouseEnter: (e: unknown) => {
-      (children.props as { onMouseEnter?: (e: unknown) => void }).onMouseEnter?.(e);
+    onMouseEnter: (e: React.MouseEvent) => {
+      const childProps = children.props as Record<string, unknown>;
+      if (typeof childProps.onMouseEnter === 'function') childProps.onMouseEnter(e);
       scheduleOpen();
     },
-    onMouseLeave: (e: unknown) => {
-      (children.props as { onMouseLeave?: (e: unknown) => void }).onMouseLeave?.(e);
+    onMouseLeave: (e: React.MouseEvent) => {
+      const childProps = children.props as Record<string, unknown>;
+      if (typeof childProps.onMouseLeave === 'function') childProps.onMouseLeave(e);
       close();
     },
-    onFocus: (e: unknown) => {
-      (children.props as { onFocus?: (e: unknown) => void }).onFocus?.(e);
+    onFocus: (e: React.FocusEvent) => {
+      const childProps = children.props as Record<string, unknown>;
+      if (typeof childProps.onFocus === 'function') childProps.onFocus(e);
       scheduleOpen();
     },
-    onBlur: (e: unknown) => {
-      (children.props as { onBlur?: (e: unknown) => void }).onBlur?.(e);
+    onBlur: (e: React.FocusEvent) => {
+      const childProps = children.props as Record<string, unknown>;
+      if (typeof childProps.onBlur === 'function') childProps.onBlur(e);
       close();
     },
-    ...(contentStr ? { 'aria-describedby': tooltipId } : {}),
-  });
+    ...(open ? { 'aria-describedby': tooltipId } : {}),
+  } as Record<string, unknown>);
 
   return (
     <>
       {child}
-      {open && content
+      {open && content && typeof document !== 'undefined'
         ? createPortal(
             <div
               id={tooltipId}
               role="tooltip"
               className={cn(
-                'fixed z-[9999] max-w-[320px] rounded-lg bg-gray-900 px-3 py-2 text-xs leading-snug text-white shadow-xl pointer-events-none',
+                'fixed z-[9999] max-w-[320px] rounded-lg px-3 py-2 text-xs leading-snug shadow-xl pointer-events-none',
+                'bg-surface-100 text-white ring-1 ring-white/10',
                 className,
               )}
               style={

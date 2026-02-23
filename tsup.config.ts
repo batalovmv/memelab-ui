@@ -10,7 +10,7 @@ export default defineConfig([
     format: ['esm', 'cjs'],
     dts: true,
     clean: true,
-    sourcemap: true,
+    sourcemap: false,
     external: ['react', 'react-dom', 'react/jsx-runtime', 'tailwindcss', 'tailwindcss/plugin'],
     treeshake: true,
     splitting: false,

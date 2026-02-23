@@ -1,7 +1,7 @@
 @layer base {
   body {
-    background-color: var(--ml-bg, #0a0a0f);
-    color: var(--ml-fg, #f9fafb);
+    background-color: rgb(var(--ml-bg, 10 10 15));
+    color: rgb(var(--ml-fg, 249 250 251));
     font-family: var(--ml-font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -12,10 +12,10 @@
     width: 6px;
   }
   ::-webkit-scrollbar-track {
-    background: var(--ml-surface-50, #0f0f18);
+    background: rgb(var(--ml-surface-50, 15 15 24));
   }
   ::-webkit-scrollbar-thumb {
-    background: var(--ml-surface-300, #24243a);
+    background: rgb(var(--ml-surface-300, 36 36 58));
     border-radius: 9999px;
   }
 
@@ -23,7 +23,7 @@
   :where(a, button, input, select, textarea, [role='button'], [role='menuitem'], [role='tab']):focus-visible {
     outline: none;
     box-shadow:
-      0 0 0 2px var(--ml-primary, #8b5cf6),
+      0 0 0 2px rgb(var(--ml-primary, 139 92 246)),
       0 0 0 4px transparent;
   }
 
@@ -33,8 +33,8 @@
   }
   select option,
   select optgroup {
-    background-color: var(--ml-surface-50, #0f0f18);
-    color: var(--ml-fg, #f9fafb);
+    background-color: rgb(var(--ml-surface-50, 15 15 24));
+    color: rgb(var(--ml-fg, 249 250 251));
   }
 
   /* Accessibility: link underline offset */

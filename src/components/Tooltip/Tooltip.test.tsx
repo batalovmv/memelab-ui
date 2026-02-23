@@ -76,21 +76,36 @@ describe('Tooltip', () => {
     expect(within(document.body).queryByRole('tooltip')).not.toBeInTheDocument();
   });
 
-  it('sets aria-describedby on child when content is string', () => {
+  it('sets aria-describedby on child when tooltip is open', () => {
     render(
-      <Tooltip content="Help text">
+      <Tooltip content="Help text" delayMs={0}>
         <button>Hover me</button>
       </Tooltip>,
     );
-    expect(screen.getByRole('button')).toHaveAttribute('aria-describedby');
+    const button = screen.getByRole('button');
+
+    // Not set when closed
+    expect(button).not.toHaveAttribute('aria-describedby');
+
+    fireEvent.mouseEnter(button);
+    act(() => { vi.advanceTimersByTime(0); });
+
+    // Set when open
+    expect(button).toHaveAttribute('aria-describedby');
   });
 
-  it('does not set aria-describedby when content is not a string', () => {
+  it('sets aria-describedby for ReactNode content when open', () => {
     render(
-      <Tooltip content={<span>Help</span>}>
+      <Tooltip content={<span>Help</span>} delayMs={0}>
         <button>Hover me</button>
       </Tooltip>,
     );
-    expect(screen.getByRole('button')).not.toHaveAttribute('aria-describedby');
+    const button = screen.getByRole('button');
+
+    fireEvent.mouseEnter(button);
+    act(() => { vi.advanceTimersByTime(0); });
+
+    // Now set for ReactNode content too
+    expect(button).toHaveAttribute('aria-describedby');
   });
 });

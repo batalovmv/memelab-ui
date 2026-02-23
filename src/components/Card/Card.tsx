@@ -1,4 +1,4 @@
-import type { HTMLAttributes, ReactNode } from 'react';
+import { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
 
 import { cn } from '@/utils/cn';
 
@@ -10,11 +10,15 @@ export type CardProps = HTMLAttributes<HTMLDivElement> & {
   children: ReactNode;
 };
 
-export function Card({ hoverable, variant = 'surface', className, ...props }: CardProps) {
+export const Card = forwardRef<HTMLDivElement, CardProps>(function Card(
+  { hoverable, variant = 'surface', className, ...props },
+  ref,
+) {
   return (
     <div
+      ref={ref}
       {...props}
       className={cn(variant === 'glass' ? 'glass' : 'surface', hoverable && 'surface-hover', className)}
     />
   );
-}
+});
