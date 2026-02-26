@@ -51,6 +51,32 @@ describe('Card', () => {
     expect(card).toHaveClass('surface-hover');
   });
 
+  it('applies default padding (md)', () => {
+    const { container } = render(<Card>Content</Card>);
+    const card = container.firstChild as HTMLElement;
+    expect(card).toHaveClass('p-5');
+  });
+
+  it('applies no padding when padding="none"', () => {
+    const { container } = render(<Card padding="none">Content</Card>);
+    const card = container.firstChild as HTMLElement;
+    expect(card).not.toHaveClass('p-5');
+    expect(card).not.toHaveClass('p-3');
+    expect(card).not.toHaveClass('p-6');
+  });
+
+  it('applies small padding', () => {
+    const { container } = render(<Card padding="sm">Content</Card>);
+    const card = container.firstChild as HTMLElement;
+    expect(card).toHaveClass('p-3');
+  });
+
+  it('applies large padding', () => {
+    const { container } = render(<Card padding="lg">Content</Card>);
+    const card = container.firstChild as HTMLElement;
+    expect(card).toHaveClass('p-6');
+  });
+
   it('applies custom className', () => {
     const { container } = render(<Card className="custom-class">Content</Card>);
     const card = container.firstChild as HTMLElement;

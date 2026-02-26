@@ -67,7 +67,7 @@ export { Tabs, TabList, Tab, TabPanel } from './components/Tabs';
 export type { TabsProps, TabsVariant, TabListProps, TabProps, TabPanelProps } from './components/Tabs';
 
 export { Card } from './components/Card';
-export type { CardProps, CardVariant } from './components/Card';
+export type { CardProps, CardVariant, CardPadding } from './components/Card';
 
 export { Modal } from './components/Modal';
 export type { ModalProps } from './components/Modal';
