@@ -40,6 +40,22 @@ export const CustomDelay: Story = {
   },
 };
 
+export const Left: Story = {
+  args: {
+    content: 'Tooltip on left',
+    placement: 'left',
+    children: <button className="rounded-lg bg-white/10 px-4 py-2 text-white">Hover me</button>,
+  },
+};
+
+export const Right: Story = {
+  args: {
+    content: 'Tooltip on right',
+    placement: 'right',
+    children: <button className="rounded-lg bg-white/10 px-4 py-2 text-white">Hover me</button>,
+  },
+};
+
 export const RichContent: Story = {
   args: {
     content: (

@@ -52,7 +52,7 @@ export function StatCard({ value, label, icon, trend, className }: StatCardProps
   return (
     <div
       className={cn(
-        'bg-white/5 ring-1 ring-white/10 rounded-xl p-4 flex items-start gap-3',
+        'glass rounded-xl p-4 flex items-start gap-3',
         className,
       )}
     >

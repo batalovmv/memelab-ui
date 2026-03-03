@@ -16,3 +16,5 @@ export type { UseIntersectionObserverOptions, UseIntersectionObserverReturn } fr
 
 export { useSharedNow } from './useSharedNow';
 export type { UseSharedNowOptions } from './useSharedNow';
+
+export { useScrollLock } from './useScrollLock';

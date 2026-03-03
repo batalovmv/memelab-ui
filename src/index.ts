@@ -3,7 +3,7 @@ export { cn } from './utils/cn';
 export { focusSafely, getFocusableElements } from './utils/focus';
 
 // Hooks
-export { useClipboard, useDisclosure, useMediaQuery, useDebounce, useHotkeys, useIntersectionObserver, useSharedNow } from './hooks';
+export { useClipboard, useDisclosure, useMediaQuery, useDebounce, useHotkeys, useIntersectionObserver, useSharedNow, useScrollLock } from './hooks';
 export type { UseClipboardReturn, UseDisclosureReturn, HotkeyBinding, HotkeyModifiers, UseHotkeysOptions, UseIntersectionObserverOptions, UseIntersectionObserverReturn, UseSharedNowOptions } from './hooks';
 
 // Tokens
@@ -207,3 +207,11 @@ export type { TransitionProps, TransitionPreset } from './components/Transition'
 // Components — Accessibility
 export { VisuallyHidden } from './components/VisuallyHidden';
 export type { VisuallyHiddenProps } from './components/VisuallyHidden';
+
+// Components — Error handling
+export { ErrorBoundary } from './components/ErrorBoundary';
+export type { ErrorBoundaryProps } from './components/ErrorBoundary';
+
+// Components — Loading
+export { LoadingScreen } from './components/LoadingScreen';
+export type { LoadingScreenProps } from './components/LoadingScreen';

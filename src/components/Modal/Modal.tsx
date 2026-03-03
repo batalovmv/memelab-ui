@@ -1,29 +1,8 @@
 import { useEffect, useRef, type ReactNode } from 'react';
 
+import { useScrollLock } from '@/hooks/useScrollLock';
 import { cn } from '@/utils/cn';
 import { focusSafely, getFocusableElements } from '@/utils/focus';
-
-// ─── Ref-counting scroll lock (safe for nested modals) ──────────────────────
-
-let scrollLockCount = 0;
-let savedOverflow = '';
-
-function lockScroll() {
-  if (typeof document === 'undefined') return;
-  if (scrollLockCount === 0) {
-    savedOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-  }
-  scrollLockCount++;
-}
-
-function unlockScroll() {
-  if (typeof document === 'undefined') return;
-  scrollLockCount = Math.max(0, scrollLockCount - 1);
-  if (scrollLockCount === 0) {
-    document.body.style.overflow = savedOverflow;
-  }
-}
 
 export type ModalProps = {
   isOpen: boolean;
@@ -76,12 +55,8 @@ export function Modal({
     };
   }, [isOpen]);
 
-  // Body scroll lock (ref-counted for nested modals)
-  useEffect(() => {
-    if (!isOpen) return;
-    lockScroll();
-    return () => unlockScroll();
-  }, [isOpen]);
+  // Body scroll lock (shared ref-counted)
+  useScrollLock(isOpen);
 
   if (!isOpen) return null;
 

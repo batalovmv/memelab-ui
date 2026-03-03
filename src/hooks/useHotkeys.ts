@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 export type HotkeyModifiers = {
   ctrl?: boolean;
@@ -45,12 +45,14 @@ export function useHotkeys(
   options: UseHotkeysOptions = {},
 ): void {
   const { enabled = true } = options;
+  const bindingsRef = useRef(bindings);
+  bindingsRef.current = bindings;
 
   useEffect(() => {
     if (!enabled) return;
 
     const onKeyDown = (e: KeyboardEvent) => {
-      for (const binding of bindings) {
+      for (const binding of bindingsRef.current) {
         if (e.key === binding.key && matchModifiers(e, binding.modifiers)) {
           binding.handler(e);
         }
@@ -59,6 +61,5 @@ export function useHotkeys(
 
     document.addEventListener('keydown', onKeyDown);
     return () => document.removeEventListener('keydown', onKeyDown);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [enabled, ...bindings]);
+  }, [enabled]);
 }

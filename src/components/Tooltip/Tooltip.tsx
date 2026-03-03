@@ -13,7 +13,7 @@ import { createPortal } from 'react-dom';
 
 import { cn } from '@/utils/cn';
 
-export type TooltipPlacement = 'top' | 'bottom';
+export type TooltipPlacement = 'top' | 'bottom' | 'left' | 'right';
 
 export type TooltipProps = {
   content: ReactNode;
@@ -43,20 +43,35 @@ export function Tooltip({ content, delayMs = 500, placement = 'top', className, 
     const el = anchorRef.current;
     if (!el) return;
     const r = el.getBoundingClientRect();
+    const vw = window.innerWidth;
 
     const centerX = r.left + r.width / 2;
-    const preferTop = placement === 'top';
+    const centerY = r.top + r.height / 2;
     const topY = r.top - 10;
     const bottomY = r.bottom + 10;
+    const leftX = r.left - 10;
+    const rightX = r.right + 10;
 
-    const canTop = topY > 8;
-    const effPlacement: TooltipPlacement = preferTop ? (canTop ? 'top' : 'bottom') : 'bottom';
+    let effPlacement: TooltipPlacement = placement;
 
-    setPos({
-      left: Math.round(centerX),
-      top: Math.round(effPlacement === 'top' ? topY : bottomY),
-      placement: effPlacement,
-    });
+    if (placement === 'top' || placement === 'bottom') {
+      const canTop = topY > 8;
+      effPlacement = placement === 'top' ? (canTop ? 'top' : 'bottom') : 'bottom';
+      setPos({
+        left: Math.round(centerX),
+        top: Math.round(effPlacement === 'top' ? topY : bottomY),
+        placement: effPlacement,
+      });
+    } else {
+      const canLeft = leftX > 8;
+      const canRight = rightX < vw - 8;
+      effPlacement = placement === 'left' ? (canLeft ? 'left' : 'right') : (canRight ? 'right' : 'left');
+      setPos({
+        left: Math.round(effPlacement === 'left' ? leftX : rightX),
+        top: Math.round(centerY),
+        placement: effPlacement,
+      });
+    }
   }, [placement]);
 
   const scheduleOpen = useCallback(() => {
@@ -143,7 +158,11 @@ export function Tooltip({ content, delayMs = 500, placement = 'top', className, 
                   ? {
                       left: pos.left,
                       top: pos.top,
-                      transform: pos.placement === 'top' ? 'translate(-50%, -100%)' : 'translate(-50%, 0%)',
+                      transform:
+                        pos.placement === 'top' ? 'translate(-50%, -100%)'
+                        : pos.placement === 'bottom' ? 'translate(-50%, 0%)'
+                        : pos.placement === 'left' ? 'translate(-100%, -50%)'
+                        : 'translate(0%, -50%)',
                     }
                   : { left: 0, top: 0, transform: 'translate(-9999px, -9999px)' }
               }
