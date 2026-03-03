@@ -4,7 +4,7 @@ All notable changes to `@memelabui/ui` will be documented in this file.
 
 Format follows [Keep a Changelog](https://keepachangelog.com/).
 
-## [Unreleased]
+## [0.8.0] - 2026-03-03
 
 ### Added
 - `ErrorBoundary` — React error boundary with default fallback and reset
