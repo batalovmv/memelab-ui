@@ -26,16 +26,17 @@ pnpm build:storybook # Build static Storybook
 
 ```
 src/
-├── index.ts          # Root barrel export (57+ components, 7 hooks, utils, tokens)
+├── index.ts          # Root barrel export (59 components, 8 hooks, utils, tokens)
 ├── tokens/           # CSS variables + JS color constants
 ├── utils/            # cn() (clsx-like, no tailwind-merge), focus utilities
 ├── hooks/            # Reusable hooks (useClipboard, useDisclosure, etc.)
-├── styles/           # CSS layers (base, components, animations)
+├── styles/           # CSS layers + entry point
+│   ├── index.css       # CSS entry point (imports base + components + animations + Tailwind directives)
 │   ├── components.css  # .glass, .surface, .surface-hover, .section-title, .text-gradient, etc.
 │   ├── base.css        # Body, scrollbar, focus, select, link resets
 │   └── animations.css  # @keyframes + reduced-motion support
 ├── preset/           # Tailwind preset for consumers (colors, shadows, animations)
-└── components/       # All React components (57 directories)
+└── components/       # All React components (59 directories)
     ├── Button/       # Each has: Component.tsx, index.ts, .stories.tsx, .test.tsx
     ├── Card/         # Glass/surface card with padding prop
     ├── SectionCard/  # Settings section with title + body (has own padding)
@@ -59,9 +60,9 @@ These CSS classes provide background, blur, border, and shadow. They intentional
 - `SectionCard` — built-in `px-5 py-4` in header + body
 - `StatCard` — built-in `p-4`
 - `Navbar` — inner `px-6 h-16` (fixed layout)
-- `Sidebar` — no padding, consumer adds via nav items
+- `Sidebar` — `py-2` on inner nav wrapper only, consumer adds horizontal padding via nav items
 
-## Components (57 directories)
+## Components (59 directories)
 
 ### Layout
 - **PageShell** — page wrapper with animated gradient orbs
@@ -85,9 +86,10 @@ These CSS classes provide background, blur, border, and shadow. They intentional
 - **RadioGroup / RadioItem** — compound radio buttons
 - **Toggle** — switch control, props: `checked`, `onChange(boolean)`, `label?`, `busy?`, `size?`
 - **Slider** — range input with value display
-- **TagInput** — tag input with Enter/comma/paste, dedup, maxTags
+- **TagInput** — tag input with Enter/comma/Tab/paste, dedup, maxTags, forwardRef
 - **ColorInput** — hex color picker with swatch
 - **FormField** — generic label + error + helper wrapper
+- **DropZone** — drag-and-drop file upload area
 
 ### Actions
 - **Button** — 6 variants (primary/secondary/danger/success/warning/ghost) + loading + sizes
@@ -105,11 +107,12 @@ These CSS classes provide background, blur, border, and shadow. They intentional
 - **Divider** — horizontal/vertical with optional label
 - **ActiveFilterPills** — dismissible filter pill row + clear all
 - **DotIndicator** — dot-based remaining count
+- **Breadcrumbs** — navigation breadcrumb trail
 
 ### Overlay
 - **Modal** — dialog with focus trap, scroll lock, backdrop blur
 - **ConfirmDialog** — confirmation prompt
-- **Tooltip** — hover/focus tooltip with portal
+- **Tooltip** — hover/focus tooltip with portal (top/bottom/left/right placement)
 - **Dropdown** compound — Trigger, Menu, Item, Separator
 - **Popover** — click-triggered positioned popup
 - **Drawer** — slide-in side panel (left/right/bottom)
@@ -134,6 +137,8 @@ These CSS classes provide background, blur, border, and shadow. They intentional
 - **Alert** — inline notification (info/success/warning/error)
 - **CopyField** — read-only field with copy button + masking
 - **Transition** — animated enter/exit wrapper
+- **ErrorBoundary** — React error boundary with fallback UI and `onError` callback
+- **LoadingScreen** — full-screen spinner with optional message
 
 ### Accessibility
 - **VisuallyHidden** — screen reader-only content
@@ -146,6 +151,7 @@ These CSS classes provide background, blur, border, and shadow. They intentional
 - **useHotkeys** — keyboard shortcuts
 - **useIntersectionObserver** — lazy loading, infinite scroll
 - **useSharedNow** — reactive clock for countdowns
+- **useScrollLock** — lock body scroll (used by Modal)
 
 ## CSS Utility Classes (from styles/components.css)
 
@@ -183,6 +189,69 @@ These CSS classes provide background, blur, border, and shadow. They intentional
 - Commits: `feat:`, `fix:`, `refactor:`, `docs:`
 - Tests: co-located `*.test.tsx` next to component
 - Stories: co-located `*.stories.tsx` next to component
+
+## Prohibitions (NEVER do)
+
+1. **NEVER** add `padding` to `.glass` or `.surface` CSS classes — they are visual-only treatments
+2. **NEVER** use `tailwind-merge` or replace `cn()` with it — the library deliberately uses simple class concatenation
+3. **NEVER** create a form element or button component without `forwardRef`
+4. **NEVER** create a component directory without all 4 files: `Component.tsx`, `index.ts`, `*.stories.tsx`, `*.test.tsx`
+5. **NEVER** use `export default` for components — always named exports (except Tailwind preset)
+6. **NEVER** add a component or hook without exporting it from `src/index.ts`
+7. **NEVER** use `any` without an explicit comment explaining why
+8. **NEVER** add a dependency without checking if `cn()` or existing utils already cover the use case
+
+## Adding a New Component
+
+Follow this checklist for every new component:
+
+```
+src/components/MyComponent/
+├── MyComponent.tsx       # Component implementation (named export, forwardRef if interactive)
+├── index.ts              # Re-export: export { MyComponent } from './MyComponent'; export type { MyComponentProps } from './MyComponent';
+├── MyComponent.stories.tsx  # Storybook stories (at minimum: Default + key variants)
+└── MyComponent.test.tsx     # Tests (render, props, interactions, a11y basics)
+```
+
+1. Create all 4 files — no exceptions
+2. Use `forwardRef` if the component is a form element, button, or needs DOM ref access
+3. Use `cn()` for className composition
+4. Add `className?: string` prop for consumer overrides
+5. Export from `src/index.ts` (both component and its props type)
+6. **Update this CLAUDE.md** — add to the Components section under the correct category
+
+## Testing Rules
+
+- Every component must have a co-located `*.test.tsx`
+- Test: renders without crashing, key props affect output, user interactions, error/edge states
+- Use `@testing-library/react` + `userEvent` for interactions
+- Use `vi.fn()` for callback assertions
+- Use `screen.getByRole` / `getByText` / `getByLabelText` — avoid `getByTestId` unless necessary
+- Run affected tests before committing: `pnpm test -- --run src/components/AffectedComponent`
+
+## Guard Rails
+
+### Before writing code
+- Read the component source before modifying — understand existing props and patterns
+- `Grep` for test files that reference the old API if changing component props
+- Check if `cn()` covers your needs before adding any className utility
+
+### Before committing
+- Run `pnpm typecheck` — no TypeScript errors
+- Run tests for affected components: `pnpm test -- --run path/to/component`
+- Verify the component is exported from `src/index.ts`
+- Verify stories render in Storybook if modified
+
+## When to Update This File
+
+Update CLAUDE.md when any of the following happens:
+- New component added → add to Components section, update count in Architecture
+- New hook added → add to Hooks section, update count in Architecture
+- Component API changed (props added/removed) → update component description
+- New CSS utility class added → add to CSS Utility Classes table
+- New CSS token added → add to Key Tokens table
+- Design decision changed → update Key Design Decisions section
+- New convention established → add to Code Style or Prohibitions
 
 ## Consumer Integration
 
